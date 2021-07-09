@@ -557,22 +557,26 @@ public:
 	*/
 	void insert_rows(const std::vector<size_t>& r_inds) {
 		// size_t offset = 0;
-		auto iv = indval.begin();
-		while (iv != indval.end()) {
-			// search for how many rows will be inserted
-			auto ri = std::lower_bound(r_inds.begin(), r_inds.end(), iv->ind);
-			iv->ind += std::distance(r_inds.begin(), ri);
+		if(r_inds.begin()!=r_inds.end()){ //non-empty check 
+			auto iv = indval.begin();
+			while (iv != indval.end()) {
+				// search for how many rows will be inserted
+				auto ri = std::lower_bound(r_inds.begin(), r_inds.end(), iv->ind);
+				iv->ind += std::distance(r_inds.begin(), ri);
 
-			// insert additional rows as necessary
-			while (*ri <= iv->ind && ri != r_inds.end()) {++ri; iv->ind++;}
+				// insert additional rows as necessary
+				while (*ri <= iv->ind && ri != r_inds.end()) {++ri; iv->ind++;}
 
-			++iv;
+				++iv;
+			}
+			// // we only enter this loop if we already inserted all rows.
+			// while (iv != indval.end()) {
+			// 	std::cout << "\ngo into the second loop of insert rows" << std::endl;
+			// 	iv->ind += r_inds.size();
+			// 	++iv;
+			// }
 		}
-		// we only enter this loop if we already inserted all rows.
-		while (iv != indval.end()) {
-			iv->ind += r_inds.size();
-			++iv;
-		}
+		
 	}
 
 	// // v[i] <- v[i] + c * v[j]
